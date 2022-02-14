@@ -599,13 +599,17 @@ canonicalize (SV* loc_id_sv=&PL_sv_undef)
             _handle_uerr(err, "uloc_canonicalize", NULL);
         }
 
-        char name[1 + size];
+        RETVAL = newSV(size);
+        sv_2mortal(RETVAL);
+
         err = U_ZERO_ERROR;
 
-        uloc_canonicalize( loc_id, name, 1 + size, &err);
+        uloc_canonicalize( loc_id, SvPVX(RETVAL), 1 + size, &err);
         _handle_uerr(err, "uloc_canonicalize", NULL);
 
-        RETVAL = newSVpvn(name, size);
+        SvPOK_on(RETVAL);
+        SvCUR_set(RETVAL, size);
+        SvREFCNT_inc(RETVAL);
 
     OUTPUT:
         RETVAL
