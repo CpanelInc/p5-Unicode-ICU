@@ -1,0 +1,45 @@
+on:
+  workflow_call:
+    inputs:
+      url:
+        required: true
+        type: string
+      create_pkg_config_cmd:
+        required: false
+        type: string
+
+jobs:
+  reusable_defined_icu:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        perl-version:
+          - '5.34'
+
+    container:
+      image: perldocker/perl-tester:${{ matrix.perl-version }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: apt remove -y libicu-dev
+      - name: perl -V
+        run: perl -V
+      - name: Download ICU
+        run: curl -L ${{ inputs.url }} > icu.tar.gz
+      - name: Build & install ICU
+        run: tar -xzf icu.tar.gz && cd icu/source && ./configure --prefix=$PWD/../build && make install
+      - name: Create pkg-config file if needed
+        if: ${{ inputs.create_pkg_config_cmd }}
+        run: ${{ inputs.create_pkg_config_cmd }}
+      - name: Install Perl Dependencies
+        run: cpanm --notest --installdeps --with-configure --with-develop .
+      - name: perl Makefile.PL
+        run: perl Makefile.PL
+        env:
+            PKG_CONFIG_PATH: icu/build/lib/pkgconfig
+      - name: make
+        run: make
+      - name: Run Tests
+        run: prove -wlvmb t

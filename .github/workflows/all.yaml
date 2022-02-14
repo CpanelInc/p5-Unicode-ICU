@@ -55,137 +55,28 @@ jobs:
 
   # CloudLinux 6
   linux-icu-4-2-1:
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        perl-version:
-          - '5.34'
-
-    container:
-      image: perldocker/perl-tester:${{ matrix.perl-version }}
-
-    steps:
-      - uses: actions/checkout@v2
-      - run: apt remove -y libicu-dev
-      - name: perl -V
-        run: perl -V
-      - name: Download ICU
-        run: curl -L https://sourceforge.net/projects/icu/files/ICU4C/4.2.1/icu4c-4_2_1-src.tgz/download > icu.tar.gz
-      - name: Install ICU
-        run: tar -xzf icu.tar.gz && cd icu/source && ./configure --prefix=$PWD/../build && make install
-      - name: Create pkg-config file
-        run: |
-            perl -MCwd -E'my $pwd = Cwd::getcwd; $, = "\n"; say q<Name: icu>, q<Version: 4.2.1>, q<Description: icu>, qq<Cflags: -I$pwd/icu/build/include>, qq<Libs: -L$pwd/icu/build/lib -licui18n -licuio -licuuc -licudata>' > icu.pc
-      - name: Install Dependencies
-        run: cpanm --notest --installdeps --with-configure --with-develop .
-      - name: perl Makefile.PL
-        run: perl Makefile.PL
-        env:
-            PKG_CONFIG_PATH: .
-      - name: make
-        run: make
-      - name: Run Tests
-        run: prove -wlvmb t
+    uses: ./.github/workflows/reusable_defined_icu.yaml
+    with:
+      url: https://sourceforge.net/projects/icu/files/ICU4C/4.2.1/icu4c-4_2_1-src.tgz/download
+      create_pkg_config_cmd: |
+            mkdir icu/build/lib/pkgconfig && perl -MCwd -E'my $pwd = Cwd::getcwd; $, = "\n"; say q<Name: icu>, q<Version: 4.2.1>, q<Description: icu>, qq<Cflags: -I$pwd/icu/build/include>, qq<Libs: -L$pwd/icu/build/lib -licui18n -licuio -licuuc -licudata>' > icu/build/lib/pkgconfig/icu.pc
 
   # CentOS/RHEL 7
   linux-icu-50-2:
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        perl-version:
-          - '5.34'
-
-    container:
-      image: perldocker/perl-tester:${{ matrix.perl-version }}
-
-    steps:
-      - uses: actions/checkout@v2
-      - run: apt remove -y libicu-dev
-      - name: perl -V
-        run: perl -V
-      - name: Download ICU
-        run: curl -L https://github.com/unicode-org/icu/releases/download/release-50-2/icu4c-50_2-src.tgz > icu.tar.gz
-      - name: Install ICU
-        run: tar -xzf icu.tar.gz && cd icu/source && ./configure --prefix=$PWD/../build && make install
-      - name: Install Dependencies
-        run: cpanm --notest --installdeps --with-configure --with-develop .
-      - name: perl Makefile.PL
-        run: perl Makefile.PL
-        env:
-            PKG_CONFIG_PATH: icu/build/lib/pkgconfig
-      - name: make
-        run: make
-      - name: Run Tests
-        run: prove -wlvmb t
+    uses: ./.github/workflows/reusable_defined_icu.yaml
+    with:
+      url: https://github.com/unicode-org/icu/releases/download/release-50-2/icu4c-50_2-src.tgz
 
   # CentOS/RHEL 8
   linux-icu-60-3:
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        perl-version:
-          - '5.34'
-
-    container:
-      image: perldocker/perl-tester:${{ matrix.perl-version }}
-
-    steps:
-      - uses: actions/checkout@v2
-      - run: apt remove -y libicu-dev
-      - name: perl -V
-        run: perl -V
-      - name: Download ICU
-        run: curl -L https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz > icu.tar.gz
-      - name: Install ICU
-        run: tar -xzf icu.tar.gz && cd icu/source && ./configure --prefix=$PWD/../build && make install
-      - name: Install Dependencies
-        run: cpanm --notest --installdeps --with-configure --with-develop .
-      - name: perl Makefile.PL
-        run: perl Makefile.PL
-        env:
-            PKG_CONFIG_PATH: icu/build/lib/pkgconfig
-      - name: make
-        run: make
-      - name: Run Tests
-        run: prove -wlvmb t
+    uses: ./.github/workflows/reusable_defined_icu.yaml
+    with:
+      url: https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz
 
   linux-icu-70-1:
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        perl-version:
-          - '5.34'
-
-    container:
-      image: perldocker/perl-tester:${{ matrix.perl-version }}
-
-    steps:
-      - uses: actions/checkout@v2
-      - run: apt remove -y libicu-dev
-      - name: perl -V
-        run: perl -V
-      - name: Download ICU
-        run: curl -L https://github.com/unicode-org/icu/releases/download/release-70-1/icu4c-70_1-src.tgz > icu.tar.gz
-      - name: Install ICU
-        run: tar -xzf icu.tar.gz && cd icu/source && ./configure --prefix=$PWD/../build && make install
-      - name: Install Dependencies
-        run: cpanm --notest --installdeps --with-configure --with-develop .
-      - name: perl Makefile.PL
-        run: perl Makefile.PL
-        env:
-            PKG_CONFIG_PATH: icu/build/lib/pkgconfig
-      - name: make
-        run: make
-      - name: Run Tests
-        run: prove -wlvmb t
+    uses: ./.github/workflows/reusable_defined_icu.yaml
+    with:
+      url: https://github.com/unicode-org/icu/releases/download/release-70-1/icu4c-70_1-src.tgz
 
 # FreeBSD segfaults due to this bug:
 # https://unicode-org.atlassian.net/browse/ICU-21913
