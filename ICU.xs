@@ -70,8 +70,6 @@ typedef struct {
 static void _throw_typed_error_xs( pTHX_ const char* type, SV** args ) {
     dSP;
 
-    load_module(PERL_LOADMOD_NOIMPORT, newSVpvs(PERL_ERROR_NAMESPACE), NULL);
-
     ENTER;
     SAVETMPS;
 

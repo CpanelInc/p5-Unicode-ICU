@@ -5,6 +5,8 @@ use warnings;
 
 use XSLoader;
 
+use Unicode::ICU::X ();
+
 our $VERSION;
 
 BEGIN {
