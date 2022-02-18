@@ -1,10 +1,14 @@
-package Unicode::ICU::X::Base;
-
-# Copyright 2022 by cPanel, L.L.C.
-# https://cpanel.net
+# Copyright 2022 cPanel, LLC. (copyright@cpanel.net)
+# Author: Felipe Gasper
 #
-# This is free software. You can redistribute it and/or modify it under the
-# same terms as Perl itself. See https://perldoc.perl.org/perlartistic.
+# Copyright (c) 2022, cPanel, LLC.
+# All rights reserved.
+# http://cpanel.net
+#
+# This is free software; you can redistribute it and/or modify it under the
+# same terms as Perl itself. See L<perlartistic>.
+
+package Unicode::ICU::X::Base;
 
 use strict;
 use warnings;

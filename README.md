@@ -74,9 +74,4 @@ this module:
 - [Sort::Naturally::ICU](https://metacpan.org/pod/Sort%3A%3ANaturally%3A%3AICU)
 - [Unicode::ICU::Collator](https://metacpan.org/pod/Unicode%3A%3AICU%3A%3ACollator)
 
-# COPYRIGHT & LICENSE
-
-Copyright 2022 by [cPanel, L.L.C.](https://cpanel.net)
-
-This is free software. You can redistribute it and/or modify it
-under the same terms as Perl itself. See [perlartistic](https://metacpan.org/pod/perlartistic).
+1;

@@ -1,3 +1,13 @@
+# Copyright 2022 cPanel, LLC. (copyright@cpanel.net)
+# Author: Felipe Gasper
+#
+# Copyright (c) 2022, cPanel, LLC.
+# All rights reserved.
+# http://cpanel.net
+#
+# This is free software; you can redistribute it and/or modify it under the
+# same terms as Perl itself. See L<perlartistic>.
+
 package Unicode::ICU::MessagePattern;
 
 use strict;
@@ -54,13 +64,6 @@ Returns the number of parts in the parse.
 
 Returns a L<Unicode::ICU::MessagePatternPart> instance that represents
 the part. ($INDEX is 0-based.)
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2022 by L<cPanel, L.L.C.|https://cpanel.net>
-
-This is free software. You can redistribute it and/or modify it
-under the same terms as Perl itself. See L<perlartistic>.
 
 =cut
 

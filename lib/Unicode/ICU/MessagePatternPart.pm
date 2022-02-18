@@ -1,3 +1,13 @@
+# Copyright 2022 cPanel, LLC. (copyright@cpanel.net)
+# Author: Felipe Gasper
+#
+# Copyright (c) 2022, cPanel, LLC.
+# All rights reserved.
+# http://cpanel.net
+#
+# This is free software; you can redistribute it and/or modify it under the
+# same terms as Perl itself. See L<perlartistic>.
+
 package Unicode::ICU::MessagePatternPart;
 
 use strict;
@@ -85,13 +95,6 @@ character indices, not C<UChar *> indices:
 Getting actual character indices matters if your pattern contains emoji,
 CJK, or other code points outside Unicode’s Basic Multilingual Plane,
 i.e., 0 - 0xFFFF.
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2022 by L<cPanel, L.L.C.|https://cpanel.net>
-
-This is free software. You can redistribute it and/or modify it
-under the same terms as Perl itself. See L<perlartistic>.
 
 =cut
 

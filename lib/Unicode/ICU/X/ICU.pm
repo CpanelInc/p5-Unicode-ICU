@@ -1,3 +1,13 @@
+# Copyright 2022 cPanel, LLC. (copyright@cpanel.net)
+# Author: Felipe Gasper
+#
+# Copyright (c) 2022, cPanel, LLC.
+# All rights reserved.
+# http://cpanel.net
+#
+# This is free software; you can redistribute it and/or modify it under the
+# same terms as Perl itself. See L<perlartistic>.
+
 package Unicode::ICU::X::ICU;
 
 use strict;
@@ -28,13 +38,6 @@ C<get_error_name()>)
 (potentially useful) diagnostic information.
 
 =back
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2022 by L<cPanel, L.L.C.|https://cpanel.net>
-
-This is free software. You can redistribute it and/or modify it
-under the same terms as Perl itself. See L<perlartistic>.
 
 =cut
 
