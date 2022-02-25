@@ -677,6 +677,8 @@ format (SV* self_sv, SV* pattern, SV* args=NULL)
         if (args && SvOK(args) && SvROK(args)) {
             if (SvTYPE(SvRV(args)) == SVt_PVHV) {
 #ifdef UICU_HAS_MESSAGEPATTERN
+                // In case someone just loaded Unicode::ICU:
+                load_module(PERL_LOADMOD_NOIMPORT, newSVpvs(PERL_NAMESPACE "::MessageFormat"), NULL);
 
                 // We can just “goto” the other function since it
                 // needs the same args we already have:
