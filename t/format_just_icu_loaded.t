@@ -21,6 +21,8 @@ use Unicode::ICU;
 
 my $can_take_named = Unicode::ICU::MessageFormat::CAN_TAKE_NAMED_ARGUMENTS;
 
+plan skip_all => 'Need named args; this ICU is too old.' if !$can_take_named;
+
 ok(
     Unicode::ICU::MessageFormat->new()->format("{mynum, spellout}", {mynum => 1}),
     'MessageFormat named args are usable even if only Unicode::ICU is loaded.',
