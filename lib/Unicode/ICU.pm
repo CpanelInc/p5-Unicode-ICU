@@ -120,4 +120,6 @@ this module:
 
 =back
 
+=cut
+
 1;

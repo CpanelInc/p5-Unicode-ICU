@@ -73,5 +73,3 @@ this module:
 
 - [Sort::Naturally::ICU](https://metacpan.org/pod/Sort%3A%3ANaturally%3A%3AICU)
 - [Unicode::ICU::Collator](https://metacpan.org/pod/Unicode%3A%3AICU%3A%3ACollator)
-
-1;
