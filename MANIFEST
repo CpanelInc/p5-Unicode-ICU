@@ -1,6 +1,4 @@
-.github/workflows/all.yaml
-.github/workflows/reusable_defined_icu.yaml
-.gitignore
+Changes
 ICU.xs
 MANIFEST
 Makefile.PL
@@ -20,6 +18,7 @@ lib/Unicode/ICU/X/ICU.pm
 ppport.h
 t/basic.t
 t/format.t
+t/format_just_icu_loaded.t
 t/idn.t
 t/listformatter.t
 t/locale.t

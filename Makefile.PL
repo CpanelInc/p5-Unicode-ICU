@@ -45,7 +45,7 @@ if (!$cflags && !$libs) {
     die "Your system’s pkg-config doesn’t know about ICU. Is it installed?\n";
 }
 
-my $cc = 'g++';
+my $cc = 'c++';
 
 my $basic_inc = "-Wall -I. @inc_extra $cflags";
 
