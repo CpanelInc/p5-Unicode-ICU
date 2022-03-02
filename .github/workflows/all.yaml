@@ -84,7 +84,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: vmactions/freebsd-vm@v0.1.6
       with:
-        prepare: pkg install -y p5-ExtUtils-PkgConfig curl icu gcc
+        prepare: pkg install -y p5-ExtUtils-PkgConfig curl icu
         run: |
             perl -V
             curl -L https://cpanmin.us | perl - --notest --installdeps --with-develop --with-configure .
