@@ -64,6 +64,8 @@ typedef struct {
 #define _warn_if_global_destruct(self_sv) \
     if (PL_dirty) warn("DESTROY at DESTRUCT: %" SVf, self_sv);
 
+#define NV_IS_PLAIN_DOUBLE (sizeof(NV) == sizeof(double))
+
 /*
  * We do as much as we can here in C, but some of ICU’s functionality
  * is only available from C++. See unicode_icu.cc for those parts.
@@ -794,8 +796,22 @@ format (SV* self_sv, SV* pattern, SV* args=NULL)
 
                     case PERL_UICU_FORMATTABLE_DATE:
                     case PERL_UICU_FORMATTABLE_DOUBLE:
-                        SvNV(curarg);
-                        args_ptrs[a] = &SvNVX(curarg);
+
+                        // Ideally we’d use a preprocessor directive here,
+                        // but NV_IS_PLAIN_DOUBLE needs sizeof(). The
+                        // compiler should still optimize this out, at least.
+                        if (NV_IS_PLAIN_DOUBLE) {
+                            SvNV(curarg);
+                            args_ptrs[a] = &SvNVX(curarg);
+                        }
+                        else {
+                            double *myval;
+                            Newx(myval, 1, double);
+                            SAVEFREEPV(myval);
+
+                            args_ptrs[a] = myval;
+                            *myval = (double) SvNV(curarg);
+                        }
                         break;
 
                     case PERL_UICU_FORMATTABLE_LONG:
