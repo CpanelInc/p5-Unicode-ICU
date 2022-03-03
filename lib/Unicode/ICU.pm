@@ -20,7 +20,7 @@ use Unicode::ICU::X ();
 our $VERSION;
 
 BEGIN {
-    $VERSION = '0.03_02';
+    $VERSION = '0.03_03';
     XSLoader::load(__PACKAGE__, $VERSION);
 }
 
