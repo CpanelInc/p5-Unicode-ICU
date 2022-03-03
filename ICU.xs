@@ -39,6 +39,9 @@
 #include <unicode/ulistformatter.h>
 #endif
 
+// Since this file is compiled as C++, not C, we can use this:
+#include <vector>
+
 // For debugging:
 // #include <unicode/ustdio.h>
 
@@ -63,6 +66,15 @@ typedef struct {
     if (PL_dirty) warn("DESTROY at DESTRUCT: %" SVf, self_sv);
 
 #define NV_IS_PLAIN_DOUBLE (sizeof(NV) == sizeof(double))
+
+// C99 defines variable-length arrays, but C++ never did.
+// g++ allows them anyway, but not all C++ compilers do.
+// For broader compatibility, then, we’ll avoid VLAs but
+// mimic them with C++ vectors.
+//
+#define MAKE_VLA_VIA_VECTOR(name, size, type)   \
+    std::vector<type> vector_##name(size);      \
+    type *name = vector_##name.data();
 
 /*
  * We do as much as we can here in C, but some of ICU’s functionality
@@ -289,8 +301,8 @@ SV* _format_list(pTHX_ SV* locale_sv, SV** args, I32 argslen) {
 #endif
     const char* locale = _loc_id_from_sv(locale_sv);
 
-    const UChar* ustrings[argslen];
-    I32 ustrlens[argslen];
+    MAKE_VLA_VIA_VECTOR(ustrings, argslen, const UChar*);
+    MAKE_VLA_VIA_VECTOR(ustrlens, argslen, I32);
 
     _svs_to_uchar_and_lengths(aTHX_ args, argslen, ustrings, ustrlens);
 
@@ -314,7 +326,7 @@ SV* _format_list(pTHX_ SV* locale_sv, SV** args, I32 argslen) {
         _handle_uerr(uerr, "ulistfmt_format", NULL);
     }
 
-    UChar result[bufsize];
+    MAKE_VLA_VIA_VECTOR(result, bufsize, UChar);
 
     uerr = U_ZERO_ERROR;
     ulistfmt_format(
@@ -537,7 +549,7 @@ get_display_name (SV* loc_id_sv=&PL_sv_undef, SV* disp_loc_id_sv=&PL_sv_undef)
 
         UErrorCode err = U_ZERO_ERROR;
 
-        I32 bufsz = uloc_getDisplayName(loc_id, disp_loc_id, NULL, 0, &err);
+        const I32 bufsz = uloc_getDisplayName(loc_id, disp_loc_id, NULL, 0, &err);
 
         if (err != U_BUFFER_OVERFLOW_ERROR) {
             _handle_uerr(err, "uloc_getDisplayName", NULL);
@@ -549,7 +561,8 @@ get_display_name (SV* loc_id_sv=&PL_sv_undef, SV* disp_loc_id_sv=&PL_sv_undef)
         // the +1 this would populate the buffer with a truncated-by-1
         // string.
         //
-        UChar name[1 + bufsz];
+        MAKE_VLA_VIA_VECTOR(name, 1+bufsz, UChar);
+
         err = U_ZERO_ERROR;
 
         uloc_getDisplayName(loc_id, disp_loc_id, name, 1 + bufsz, &err);
@@ -717,7 +730,7 @@ format (SV* self_sv, SV* pattern, SV* args=NULL)
             pattern_u8len
         );
 
-        UChar pattern_uchar[pattern_ucharlen];
+        MAKE_VLA_VIA_VECTOR(pattern_uchar, pattern_ucharlen, UChar);
 
         utf8_to_uchar_or_croak(aTHX_
             pattern_u8,
@@ -755,8 +768,8 @@ format (SV* self_sv, SV* pattern, SV* args=NULL)
 
         I32 args_count = perl_uicu_mfmt_count_args(fmt);
 
-        perl_uicu_formattable_t arg_types[args_count];
-        void *args_ptrs[args_count];
+        MAKE_VLA_VIA_VECTOR(arg_types, args_count, perl_uicu_formattable_t);
+        MAKE_VLA_VIA_VECTOR(args_ptrs, args_count, void*);
 
         perl_uicu_get_arg_types(fmt, arg_types);
 
@@ -872,7 +885,7 @@ new (const char* classname, SV* pattern)
             pattern_u8len
         );
 
-        UChar pattern_uchar[pattern_ucharlen];
+        MAKE_VLA_VIA_VECTOR(pattern_uchar, pattern_ucharlen, UChar);
 
         utf8_to_uchar_or_croak(aTHX_
             pattern_u8,

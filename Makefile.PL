@@ -47,6 +47,7 @@ if (!$cflags && !$libs) {
 
 my $cc = 'c++';
 
+#my $basic_inc = "-Wall -I. -Werror=vla @inc_extra $cflags";
 my $basic_inc = "-Wall -I. @inc_extra $cflags";
 
 my @defines = _determine_defines($basic_inc, $libs);
