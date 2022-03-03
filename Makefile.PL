@@ -36,7 +36,7 @@ else {
     $libs = ExtUtils::PkgConfig->libs("@iculibs");
 }
 
-my $cflags = ExtUtils::PkgConfig->cflags("@iculibs");
+my $cflags = ExtUtils::PkgConfig->cflags("@iculibs") || q<>;
 
 print "cflags: $cflags\n";
 print "libs: $libs\n";

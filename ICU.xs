@@ -55,8 +55,6 @@ typedef struct {
 #define PERL_NAMESPACE "Unicode::ICU"
 #define PERL_ERROR_NAMESPACE PERL_NAMESPACE "::X"
 
-
-
 #define my_utf8_decode_or_croak(sv) STMT_START { \
     if (!sv_utf8_decode(sv)) croak("ICU returned invalid UTF-8?!?"); \
 } STMT_END
