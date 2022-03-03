@@ -34,6 +34,8 @@ using namespace icu;
 #include <assert.h>
 #include <string.h>
 
+#include <vector>
+
 #include "unicode_icu.h"
 #include "unicode_icu_argtypelist_hack.hh"
 
@@ -93,15 +95,15 @@ extern int32_t perl_uicu_format_message__argslist (
 ) {
     MessageFormat fmt = *(const MessageFormat*) ufmt;
 
-    Formattable fargs[argscount];
+    std::vector<Formattable> fargs(argscount);
 
-    _assign_args_to_formattable(fargs, argscount, argtypes, args);
+    _assign_args_to_formattable(fargs.data(), argscount, argtypes, args);
 
     *status = U_ZERO_ERROR;
 
     UnicodeString tempBuffer;
     FieldPosition pos(FieldPosition::DONT_CARE);
-    tempBuffer = fmt.format(fargs, argscount, tempBuffer, pos, *status);
+    tempBuffer = fmt.format(fargs.data(), argscount, tempBuffer, pos, *status);
 
     if (U_FAILURE(*status)) return -1;
 
