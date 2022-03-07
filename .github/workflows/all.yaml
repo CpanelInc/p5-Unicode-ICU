@@ -29,10 +29,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: perl -V
-        run: perl -V
-      - name: Install ICU
-        run: apt install -y libicu-dev
+      - run: perl -V
+      - run: apt install -y libicu-dev pkg-config
       - name: Install Dependencies
         run: cpanm --notest --installdeps --with-configure --with-develop .
       - name: perl Makefile.PL
@@ -86,8 +84,30 @@ jobs:
     uses: ./.github/workflows/reusable_defined_icu.yaml
     with:
       url: https://sourceforge.net/projects/icu/files/ICU4C/4.2.1/icu4c-4_2_1-src.tgz/download
-      create_pkg_config_cmd: |
-            mkdir icu/build/lib/pkgconfig && perl -MCwd -E'my $pwd = Cwd::getcwd; $, = "\n"; say q<Name: icu>, q<Version: 4.2.1>, q<Description: icu>, qq<Cflags: -I$pwd/icu/build/include>, qq<Libs: -L$pwd/icu/build/lib -licui18n -licuio -licuuc -licudata>' > icu/build/lib/pkgconfig/icu.pc
+      create_pkg_config_version: 4.2.1
+
+  linux-icu-4-4-2:
+    uses: ./.github/workflows/reusable_defined_icu.yaml
+    with:
+      url: https://sourceforge.net/projects/icu/files/ICU4C/4.4.2/icu4c-4_4_2-src.tgz/download
+      create_pkg_config_version: 4.4.2
+
+  linux-icu-4-6-1:
+    uses: ./.github/workflows/reusable_defined_icu.yaml
+    with:
+      url: https://sourceforge.net/projects/icu/files/ICU4C/4.6.1/icu4c-4_6_1-src.tgz/download
+      #create_pkg_config_version: 4.6.1
+
+  linux-icu-4-8:
+    uses: ./.github/workflows/reusable_defined_icu.yaml
+    with:
+      url: https://sourceforge.net/projects/icu/files/ICU4C/4.8/icu4c-4_8-src.tgz/download
+      #create_pkg_config_version: 4.8
+
+  linux-icu-49-1-2:
+    uses: ./.github/workflows/reusable_defined_icu.yaml
+    with:
+      url: https://sourceforge.net/projects/icu/files/ICU4C/49.1/icu4c-49_1-src.tgz/download
 
   # CentOS/RHEL 7
   linux-icu-50-2:

@@ -986,7 +986,9 @@ BOOT:
     _add_umsgpat_arg_type(umsgpat_arg_type, CHOICE);
     _add_umsgpat_arg_type(umsgpat_arg_type, PLURAL);
     _add_umsgpat_arg_type(umsgpat_arg_type, SELECT);
+#ifdef UMSGPAT_ARG_TYPE_SELECTORDINAL
     _add_umsgpat_arg_type(umsgpat_arg_type, SELECTORDINAL);
+#endif
 
 I32
 type (SV* self_sv)
@@ -1117,7 +1119,9 @@ BOOT:
     _define_idn_uv_constsub(CHECK_CONTEXTJ);
     _define_idn_uv_constsub(NONTRANSITIONAL_TO_ASCII);
     _define_idn_uv_constsub(NONTRANSITIONAL_TO_UNICODE);
+#ifdef UICU_HAS_UIDNA_CHECK_CONTEXTO
     _define_idn_uv_constsub(CHECK_CONTEXTO);
+#endif
 
     HV* error_hv = get_hv(PERL_NAMESPACE "::IDN::ERROR", GV_ADD);
     _add_uidna_error(error_hv, EMPTY_LABEL);
@@ -1133,8 +1137,10 @@ BOOT:
     _add_uidna_error(error_hv, INVALID_ACE_LABEL);
     _add_uidna_error(error_hv, BIDI);
     _add_uidna_error(error_hv, CONTEXTJ);
+#ifdef UICU_HAS_UIDNA_CHECK_CONTEXTO
     _add_uidna_error(error_hv, CONTEXTO_PUNCTUATION);
     _add_uidna_error(error_hv, CONTEXTO_DIGITS);
+#endif
 
 SV*
 new (const char* classname, U32 options=UIDNA_DEFAULT)

@@ -4,7 +4,7 @@ on:
       url:
         required: true
         type: string
-      create_pkg_config_cmd:
+      create_pkg_config_version:
         required: false
         type: string
 
@@ -31,8 +31,9 @@ jobs:
       - name: Build & install ICU
         run: tar -xzf icu.tar.gz && cd icu/source && ./configure --prefix=$PWD/../build && make install
       - name: Create pkg-config file if needed
-        if: ${{ inputs.create_pkg_config_cmd }}
-        run: ${{ inputs.create_pkg_config_cmd }}
+        if: ${{ inputs.create_pkg_config_version }}
+        run: |
+            mkdir icu/build/lib/pkgconfig && perl -MCwd -E'my $pwd = Cwd::getcwd; $, = "\n"; say q<Name: icu>, q<Version: ${{ inputs.create_pkg_config_version }}>, q<Description: icu>, qq<Cflags: -I$pwd/icu/build/include>, qq<Libs: -L$pwd/icu/build/lib -licui18n -licuio -licuuc -licudata>' > icu/build/lib/pkgconfig/icu.pc
       - name: Install Perl Dependencies
         run: cpanm --notest --installdeps --with-configure --with-develop .
       - name: perl Makefile.PL

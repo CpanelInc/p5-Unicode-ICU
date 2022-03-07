@@ -1,2 +1,5 @@
+0.05
+    - Fix compatibility with releases between 4.4 and 49 (inclusive).
+
 0.04  2022-03-04
     - First public release

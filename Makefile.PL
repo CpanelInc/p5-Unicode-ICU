@@ -122,11 +122,35 @@ sub _determine_defines {
         },
 
         {
+            label => 'UIDNA_CHECK_CONTEXTO',
+            define => 'UICU_HAS_UIDNA_CHECK_CONTEXTO',
+            c => q[
+                #include <unicode/uidna.h>
+                int main() {
+                    int foo = UIDNA_CHECK_CONTEXTO;
+                    return 0;
+                }
+            ],
+        },
+
+        {
             label => 'MessagePattern',
             define => 'UICU_HAS_MESSAGEPATTERN',
             c => q[
                 #include <unicode/messagepattern.h>
                 int main() {
+                    return 0;
+                }
+            ],
+        },
+
+        {
+            label => 'UMSGPAT_ARG_TYPE_SELECTORDINAL',
+            define => 'UICU_HAS_UMSGPAT_ARG_TYPE_SELECTORDINAL',
+            c => q[
+                #include <unicode/messagepattern.h>
+                int main() {
+                    int foo = UMSGPAT_ARG_TYPE_SELECTORDINAL;
                     return 0;
                 }
             ],
