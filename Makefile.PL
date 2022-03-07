@@ -74,11 +74,12 @@ WriteMakefile(
 
     XSOPT => '-C++',
 
-    OBJECT            => [
+    OBJECT => join(
+        q< >,
         '$(BASEEXT)$(OBJ_EXT)',
         'unicode_icu.o',
         'unicode_icu_messagepattern.o',
-    ],
+    ),
 
     META_MERGE => {
         'meta-spec' => { version => 2 },
