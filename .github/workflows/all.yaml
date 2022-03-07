@@ -14,32 +14,6 @@ env:
    PERL_CARTON_PATH: $GITHUB_WORKSPACE/local
 
 jobs:
-  linux-specialperls:
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        perl-version:
-          - '5.020.003-main-longdouble-buster'
-          - '5.020.003-main-quadmath-buster'
-
-    container:
-      image: simcop2387/perl-tester:${{ matrix.perl-version }}
-
-    steps:
-      - uses: actions/checkout@v2
-      - run: perl -V
-      - run: apt install -y libicu-dev pkg-config
-      - name: Install Dependencies
-        run: cpanm --notest --installdeps --with-configure --with-develop .
-      - name: perl Makefile.PL
-        run: perl Makefile.PL
-      - name: make
-        run: make
-      - name: Run Tests
-        run: prove -wlvmb t
-
   linux:
     runs-on: ubuntu-latest
 
@@ -70,6 +44,40 @@ jobs:
         run: perl -V
       - name: Install ICU
         run: apt install -y libicu-dev
+      - name: Install Dependencies
+        run: cpanm --notest --installdeps --with-configure --with-develop .
+      - name: perl Makefile.PL
+        run: perl Makefile.PL
+      - name: make
+        run: make
+      - name: Run Tests
+        run: prove -wlvmb t
+
+  linux-specialperls:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        perl-version:
+          - '5.020.003'
+          #- '5.022.004'    # no quadmath
+          - '5.024.004'
+          - '5.026.003'
+          - '5.028.003'
+          - '5.030.003'
+          - '5.032.001'
+        perl-type:
+          - 'main-longdouble-buster'
+          - 'main-quadmath-buster'
+
+    container:
+      image: simcop2387/perl-tester:${{ matrix.perl-version }}-${{ matrix.perl-type }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: perl -V
+      - run: apt install -y libicu-dev pkg-config
       - name: Install Dependencies
         run: cpanm --notest --installdeps --with-configure --with-develop .
       - name: perl Makefile.PL
