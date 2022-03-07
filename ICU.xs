@@ -90,8 +90,8 @@ static void _throw_typed_error_xs( pTHX_ const char* type, SV** args ) {
     SAVETMPS;
 
     PUSHMARK(SP);
-    XPUSHs( newSVpvs_flags(PERL_ERROR_NAMESPACE, SVs_TEMP) );
-    XPUSHs( newSVpvn_flags(type, strlen(type), SVs_TEMP) );
+    mXPUSHs( newSVpvs(PERL_ERROR_NAMESPACE) );
+    mXPUSHs( newSVpvn(type, strlen(type)) );
     SV* arg;
     while ( (arg = *args++) ) {
         XPUSHs( sv_mortalcopy(arg) );
@@ -139,7 +139,7 @@ static SV* _my_new_blessedstruct_f (pTHX_ unsigned size, const char* classname) 
 
 static void __handle_uerr( pTHX_ UErrorCode uerr, const char* funcname, const char* msg, ... ) {
     if (U_FAILURE(uerr)) {
-        SV* funcname_sv = newSVpvn_flags( funcname, strlen(funcname), SVs_TEMP );
+        SV* funcname_sv = sv_2mortal( newSVpvn( funcname, strlen(funcname) ) );
         SV* args[] = {
             funcname_sv,
             sv_2mortal( newSViv(uerr) ),
@@ -151,7 +151,7 @@ static void __handle_uerr( pTHX_ UErrorCode uerr, const char* funcname, const ch
             va_list ap;
             va_start(ap, msg);
 
-            SV* msgsv = newSVpvs_flags("", SVs_TEMP);
+            SV* msgsv = sv_2mortal( newSVpvs("") );
             sv_vcatpvf(msgsv, msg, &ap);
 
             args[2] = msgsv;
