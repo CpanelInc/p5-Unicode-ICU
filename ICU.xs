@@ -12,12 +12,20 @@
 
 #pragma clang diagnostic ignored "-Wcompound-token-split-by-macro"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define PERL_NO_GET_CONTEXT
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
 
 #include "ppport.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 #include <stdbool.h>
 #include <string.h>
@@ -302,7 +310,7 @@ SV* _format_list(pTHX_ SV* locale_sv, SV** args, I32 argslen) {
     const char* locale = _loc_id_from_sv(locale_sv);
 
     MAKE_VLA_VIA_VECTOR(ustrings, argslen, const UChar*);
-    MAKE_VLA_VIA_VECTOR(ustrlens, argslen, I32);
+    MAKE_VLA_VIA_VECTOR(ustrlens, argslen, int32_t);
 
     _svs_to_uchar_and_lengths(aTHX_ args, argslen, ustrings, ustrlens);
 
@@ -350,7 +358,7 @@ static inline const UChar* _mpat_string(pTHX_ perl_uicu_mpat_part_struct* mystru
 
     perl_uicu_messagepattern *mpat = _from_svuvptr(aTHX_ msgpattern_sv);
 
-    I32 len;
+    int32_t len;
     return perl_uicu_mpat_get_pattern_string(mpat, &len);
 }
 #endif

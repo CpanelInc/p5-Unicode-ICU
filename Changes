@@ -2,6 +2,7 @@
     - Fix compatibility with ICU 4.4 - 49 (inclusive).
     - Fix compatibility with some older EU::MM versions.
     - Fix compatibility with Perl 5.10.0.
+    - Fix compatibility with some setups that care about I32 vs. int32_t.
 
 0.04  2022-03-04
     - First public release
