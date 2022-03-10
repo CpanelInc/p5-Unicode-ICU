@@ -3,6 +3,7 @@
     - Fix compatibility with some older EU::MM versions.
     - Fix compatibility with Perl 5.10.0.
     - Fix compatibility with some setups that care about I32 vs. int32_t.
+    - Fix compatibility with 32-bit architectures.
 
 0.04  2022-03-04
     - First public release
