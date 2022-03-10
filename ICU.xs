@@ -271,7 +271,7 @@ static void* _from_svuvptr (pTHX_ SV* self_sv) {
     return (void *) SvUV( SvRV(self_sv) );
 }
 
-static inline void _svs_to_uchar_and_lengths(pTHX_ SV** svs, I32 svs_len, const UChar** ustrings, I32 *ustrlens) {
+static inline void _svs_to_uchar_and_lengths(pTHX_ SV** svs, I32 svs_len, const UChar** ustrings, int32_t *ustrlens) {
     for (I32 i=0; i<svs_len; i++) {
         SV* curitem = svs[i];
 
