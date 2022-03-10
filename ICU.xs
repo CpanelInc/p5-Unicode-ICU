@@ -783,7 +783,7 @@ format (SV* self_sv, SV* pattern, SV* args=NULL)
 
         if (args_count) {
             if (!args || !SvOK(args)) {
-                croak("This phrase needs %d argument%s", args_count, args_count == 1 ? "" : "s");
+                croak("This phrase needs %d argument%s", (int) args_count, args_count == 1 ? "" : "s");
             }
 
             if (!SvROK(args) || (SvTYPE(SvRV(args)) != SVt_PVAV)) {
@@ -799,19 +799,19 @@ format (SV* self_sv, SV* pattern, SV* args=NULL)
             }
 
             if (given_args_count != args_count) {
-                croak("ICU arguments mismatch: Need %d, got %ld", args_count, given_args_count);
+                croak("ICU arguments mismatch: Need %d, got %ld", (int) args_count, (long) given_args_count);
             }
 
             for (I32 a=0; a<args_count; a++) {
                 SV* curarg = *(av_fetch(args_array, a, 0));
 
                 if (!SvOK(curarg)) {
-                    croak("undef (argument index %d) is forbidden", a);
+                    croak("undef (argument index %d) is forbidden", (int) a);
                 }
 
                 switch (arg_types[a]) {
                     case PERL_UICU_FORMATTABLE_OBJECT:
-                        croak("Unused argument (index %d)", a);
+                        croak("Unused argument (index %d)", (int) a);
 
                     case PERL_UICU_FORMATTABLE_DATE:
                     case PERL_UICU_FORMATTABLE_DOUBLE:
@@ -844,7 +844,7 @@ format (SV* self_sv, SV* pattern, SV* args=NULL)
                         sv_utf8_upgrade(curarg);
 
                         if (memchr(SvPVX(curarg), 0, SvCUR(curarg))) {
-                            croak("NUL bytes (argument index %d) are forbidden", a);
+                            croak("NUL bytes (argument index %d) are forbidden", (int) a);
                         }
 
                         args_ptrs[a] = &SvPVX(curarg);
@@ -937,7 +937,7 @@ get_part (SV* self_sv, UV part_index)
         if (part_index >= (U32) perl_uicu_mpat_count_parts(mpat)) {
             int32_t max = perl_uicu_mpat_count_parts(mpat) - 1;
 
-            croak("Given part index (%" UVf ") exceeds maximum (%d)", part_index, max);
+            croak("Given part index (%" UVf ") exceeds maximum (%d)", part_index, (int) max);
         }
 
         perl_uicu_messagepattern_part* part = perl_uicu_mpat_get_part(mpat, part_index);
