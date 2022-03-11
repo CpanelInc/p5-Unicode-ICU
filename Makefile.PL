@@ -67,6 +67,9 @@ if ($major_version >= 59) {
         );
     }
 }
+else {
+    print "Your ICU version ($modversion) doesn’t need C++11.\n";
+}
 
 my $cflags = ExtUtils::PkgConfig->cflags("@iculibs") || q<>;
 
