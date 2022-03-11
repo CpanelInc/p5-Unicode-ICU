@@ -5,6 +5,7 @@
     - Fix compatibility with 32-bit architectures.
     - Fix compatibility between pre-5.20 perls and clang.
     - Fix compatibility with setups where I32* vs. int32_t* matters.
+    - Only use C++11 with ICUs that need it.
 
 0.04  2022-03-04
     - First public release

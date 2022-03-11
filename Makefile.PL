@@ -16,12 +16,12 @@ use ExtUtils::PkgConfig;
 use ExtUtils::CBuilder;
 use File::Temp;
 
-my ($libs, @iculibs, @inc_extra);
+my ($modversion, $libs, @iculibs, @inc_extra);
 
 print "First let’s see if your pkg-config knows about “icu” …\n";
 
 if ($libs = ExtUtils::PkgConfig->libs("icu")) {
-    my $modversion = ExtUtils::PkgConfig->modversion('icu');
+    $modversion = ExtUtils::PkgConfig->modversion('icu');
     print "… found it! (ICU $modversion)\n";
 
     @iculibs = qw(icu);
@@ -36,15 +36,18 @@ else {
     $libs = ExtUtils::PkgConfig->libs("@iculibs");
 
     if ($libs) {
-        my $modversion = ExtUtils::PkgConfig->modversion($iculibs[0]);
+        $modversion = ExtUtils::PkgConfig->modversion($iculibs[0]);
         print "… found it! (ICU $modversion)\n";
-	print "This ICU probably needs C++11, so we’ll do that.\n";
     }
     else{
         die "Your pkg-config can’t find ICU. Is it installed?\n";
     }
+}
 
-    # This is probably a newer ICU that needs C++ 11.
+my ($major_version) = ($modversion =~ m<\A([0-9]+)>);
+if ($major_version >= 59) {
+    print "Your ICU version ($modversion) needs C++11.\n";
+
     @inc_extra = (
         '-std=c++11',
         '-Wno-c++11-extensions',
@@ -52,8 +55,8 @@ else {
     );
 
     if ($^V lt v5.20.0) {
-	print "Your perl ($^V) is old enough that its headers conflict with\n";
-	print "C++11’s user-defined literals. Disabling that feature …\n";
+        print "Your perl ($^V) is old enough that its headers conflict with\n";
+        print "C++11’s user-defined literals. Disabling that feature …\n";
 
         # In pre-5.20 perls the header files don’t always have spaces
         # around macros like “UVxf”, which C++11 invalidated. So we need
