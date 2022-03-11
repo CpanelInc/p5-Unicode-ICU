@@ -18,10 +18,32 @@ use File::Temp;
 
 my ($libs, @iculibs, @inc_extra);
 
+print "First let’s see if your pkg-config knows about “icu” …\n";
+
 if ($libs = ExtUtils::PkgConfig->libs("icu")) {
+    my $modversion = ExtUtils::PkgConfig->modversion('icu');
+    print "… found it! (ICU $modversion)\n";
+
     @iculibs = qw(icu);
 }
 else {
+    my @LIBS = qw( i18n uc );
+    #push @LIBS, 'io';   # debug
+
+    print "Doesn’t look like it. How about “icu-$LIBS[0]” et al.?\n";
+
+    @iculibs = map { "icu-$_" } @LIBS;
+    $libs = ExtUtils::PkgConfig->libs("@iculibs");
+
+    if ($libs) {
+        my $modversion = ExtUtils::PkgConfig->modversion($iculibs[0]);
+        print "… found it! (ICU $modversion)\n";
+	print "This ICU probably needs C++11, so we’ll do that.\n";
+    }
+    else{
+        die "Your pkg-config can’t find ICU. Is it installed?\n";
+    }
+
     # This is probably a newer ICU that needs C++ 11.
     @inc_extra = (
         '-std=c++11',
@@ -29,11 +51,16 @@ else {
         '-Wno-c++11-long-long',
     );
 
-    my @LIBS = qw( i18n uc );
-    #push @LIBS, 'io';   # debug
+    if ($^V lt v5.20.0) {
 
-    @iculibs = map { "icu-$_" } @LIBS;
-    $libs = ExtUtils::PkgConfig->libs("@iculibs");
+        # In pre-5.20 perls the header files don’t always have spaces
+        # around macros like “UVxf”, which C++11 invalidated. So we need
+        # to tell the compiler to allow that:
+        push @inc_extra, (
+            '-Wno-reserved-user-defined-literal',   # clang
+            '-Wno-literal-suffix',                  # g++
+        );
+    }
 }
 
 my $cflags = ExtUtils::PkgConfig->cflags("@iculibs") || q<>;
@@ -41,11 +68,9 @@ my $cflags = ExtUtils::PkgConfig->cflags("@iculibs") || q<>;
 print "cflags: $cflags\n";
 print "libs: $libs\n";
 
-if (!$cflags && !$libs) {
-    die "Your system’s pkg-config doesn’t know about ICU. Is it installed?\n";
-}
-
 my $cc = 'c++';
+
+system $cc, '-v';
 
 #my $basic_inc = "-Wall -I. -Werror=vla @inc_extra $cflags";
 my $basic_inc = "-Wall -I. @inc_extra $cflags";
