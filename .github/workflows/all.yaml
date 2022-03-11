@@ -124,6 +124,20 @@ jobs:
     with:
       url: https://github.com/unicode-org/icu/releases/download/release-50-2/icu4c-50_2-src.tgz
 
+  # Last non-C++11 version:
+  linux-icu-58-2:
+    uses: ./.github/workflows/reusable_defined_icu.yaml
+    with:
+      fix_xlocale: true
+      url: https://github.com/unicode-org/icu/releases/download/release-58-2/icu4c-58_2-src.tgz
+
+  # Starting with ICU 59, ICU required C++11.
+  linux-icu-59-1:
+    uses: ./.github/workflows/reusable_defined_icu.yaml
+    with:
+      fix_xlocale: true
+      url: https://github.com/unicode-org/icu/releases/download/release-59-1/icu4c-59_1-src.tgz
+
   # CentOS/RHEL 8
   linux-icu-60-3:
     uses: ./.github/workflows/reusable_defined_icu.yaml
