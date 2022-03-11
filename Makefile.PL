@@ -52,6 +52,8 @@ else {
     );
 
     if ($^V lt v5.20.0) {
+	print "Your perl ($^V) is old enough that its headers conflict with\n";
+	print "C++11’s user-defined literals. Disabling that feature …\n";
 
         # In pre-5.20 perls the header files don’t always have spaces
         # around macros like “UVxf”, which C++11 invalidated. So we need
