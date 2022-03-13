@@ -415,7 +415,7 @@ static SV* __idn_convert_fn (pTHX_ SV* self_sv, SV* unicode_name, idna_converter
     SvPOK_on(retval);
     sv_2mortal(retval);
 
-    uinfo = UIDNA_INFO_INITIALIZER;
+    UIDNAInfo uinfo2 = UIDNA_INFO_INITIALIZER;
     status = U_ZERO_ERROR;
 
     converter_func(
@@ -424,7 +424,7 @@ static SV* __idn_convert_fn (pTHX_ SV* self_sv, SV* unicode_name, idna_converter
         utf8len,
         SvPVX(retval),
         asciilen,
-        &uinfo,
+        &uinfo2,
         &status
     );
 
