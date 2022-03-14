@@ -945,10 +945,9 @@ get_part (SV* self_sv, UV part_index)
         RETVAL = my_new_blessedstruct(perl_uicu_mpat_part_struct, PERL_NAMESPACE "::MessagePatternPart");
         perl_uicu_mpat_part_struct* mystruct = (perl_uicu_mpat_part_struct*) my_get_blessedstruct_ptr(RETVAL);
 
-        *mystruct = (perl_uicu_mpat_part_struct) {
-            .ptr = part,
-            .msg_pattern_sv = SvREFCNT_inc(self_sv),
-        };
+        /* Struct literal assignment breaks oddly in old gcc, e.g., 4.2.1. */
+        mystruct->ptr = part;
+        mystruct->msg_pattern_sv = SvREFCNT_inc(self_sv);
 
     OUTPUT:
         RETVAL
