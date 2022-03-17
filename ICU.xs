@@ -27,6 +27,12 @@ extern "C" {
 }
 #endif
 
+// Old perls define dNOOP as `extern int`, which runs afoul of
+// some clang versions.
+#if PERL_VERSION_LT(5, 28, 0)
+#define dNOOP struct ICU_XS_notused
+#endif
+
 #include <stdbool.h>
 #include <string.h>
 
