@@ -1,4 +1,4 @@
-0.06
+0.06  2022-03-21
     - Fix compatibility with pre-5.28 and certain compilers that break
       on how dNOOP was formerly defined.
 
